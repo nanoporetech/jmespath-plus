@@ -11,6 +11,7 @@ import {
 import { ExpressionNodeTree, JSONObject } from '@metrichor/jmespath/dist/types/typings';
 import lodash from 'lodash';
 import numberScale from 'number-scale';
+import { SUPPORTED_FUNCTIONS } from './supportedFunctions';
 
 export const loadPlugins = (): boolean => {
   registerFunction(
@@ -230,9 +231,7 @@ export const loadPlugins = (): boolean => {
     ],
   );
 
-  for (const key of Object.keys(lodash)) {
-    if (['_', 'default', 'VERSION'].includes(key)) continue;
-
+  for (const key of SUPPORTED_FUNCTIONS) {
     registerFunction(
       `_${key}`,
       (resolvedArgs: any) => {
@@ -246,6 +245,5 @@ export const loadPlugins = (): boolean => {
       ],
     );
   }
-
   return true;
 };
