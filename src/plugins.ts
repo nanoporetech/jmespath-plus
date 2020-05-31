@@ -77,7 +77,8 @@ export const loadPlugins = (): boolean => {
         scale: 'SI',
         unit: unit || '',
       });
-      const hasOne = (/[\d\.]+/g.exec(formattedNumber) || [''])[0] === '1';
+      const hasMatch = /[\d\.]+/g.exec(formattedNumber);
+      const hasOne = hasMatch && hasMatch[0] === '1';
       return `${formattedNumber}${unit && (hasOne ? '' : 's')}`;
     },
     [{ types: [TYPE_NUMBER] }, { types: [TYPE_NUMBER] }, { types: [TYPE_STRING] }],

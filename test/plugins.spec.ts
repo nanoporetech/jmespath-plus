@@ -96,6 +96,8 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual('Hello Mr zebra');
     returnValue = search({ title: 'Mr', animal: 'zebra' }, 'format(`Hello ${title} ${animal}`, @)');
     expect(returnValue).toStrictEqual('Hello Mr zebra');
+    returnValue = search({ title: null, animal: 'zebra' }, 'format(`Hello ${title} ${animal}`, @)');
+    expect(returnValue).toStrictEqual('Hello  zebra');
   });
 
   it('applies the `entries` function', async () => {
