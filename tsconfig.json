@@ -2,10 +2,10 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "declaration": true,
     "declarationDir": "dist/types",
     "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "lib": [
       "es2015",
@@ -28,12 +28,12 @@
       "src/typings"
     ]
   },
-  "include": [
-    "src",
-  ],
   "exclude": [
     "node_modules",
     "test",
     "dist"
+  ],
+  "include": [
+    "src"
   ]
 }

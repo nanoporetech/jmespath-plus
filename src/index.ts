@@ -17,23 +17,25 @@ export const compile = JMESPath.compile;
 export const tokenize = JMESPath.tokenize;
 export const registerFunction = JMESPath.registerFunction;
 export const search = JMESPath.search;
+export const TreeInterpreter = JMESPath.TreeInterpreter;
 
 export const jmespath = loadPlugins() && JMESPath;
 
 export default {
+  compile,
+  jmespath,
+  registerFunction,
+  search,
+  tokenize,
+  TreeInterpreter,
   TYPE_ANY,
-  TYPE_ARRAY,
   TYPE_ARRAY_NUMBER,
   TYPE_ARRAY_STRING,
+  TYPE_ARRAY,
   TYPE_BOOLEAN,
   TYPE_EXPREF,
   TYPE_NULL,
   TYPE_NUMBER,
   TYPE_OBJECT,
   TYPE_STRING,
-  compile,
-  tokenize,
-  registerFunction,
-  search,
-  jmespath,
 };
