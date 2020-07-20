@@ -1,7 +1,7 @@
 {
   "name": "@metrichor/jmespath-plus",
   "description": "JMESPath but better",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "Oxford Nanopore Technologies",
     "email": "support@nanoporetech.com",
