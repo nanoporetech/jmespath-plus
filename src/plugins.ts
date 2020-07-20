@@ -9,8 +9,8 @@ import {
   TYPE_STRING,
 } from '@metrichor/jmespath';
 import { ExpressionNodeTree, JSONObject } from '@metrichor/jmespath/dist/types/typings';
-import lodash from 'lodash';
-import numberScale from 'number-scale';
+import * as _lodash from 'lodash';
+import { numberScale } from './lib/number-scale';
 import { SUPPORTED_FUNCTIONS } from './supportedFunctions';
 
 export const loadPlugins = (): boolean => {
@@ -236,7 +236,7 @@ export const loadPlugins = (): boolean => {
     registerFunction(
       `_${key}`,
       (resolvedArgs: any) => {
-        return resolvedArgs.length > 1 ? lodash[key](...resolvedArgs) : lodash[key](resolvedArgs[0]);
+        return resolvedArgs.length > 1 ? _lodash[key](...resolvedArgs) : _lodash[key](resolvedArgs[0]);
       },
       [
         {

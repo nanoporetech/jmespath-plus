@@ -1,3 +1,4 @@
+export type { FunctionSignature, InputSignature, RuntimeFunction } from '@metrichor/jmespath/dist/types'
 import { jmespath as JMESPath } from '@metrichor/jmespath';
 
 import { loadPlugins } from './plugins';
