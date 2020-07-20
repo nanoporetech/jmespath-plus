@@ -1,4 +1,5 @@
-export type { FunctionSignature, InputSignature, RuntimeFunction } from '@metrichor/jmespath/dist/types'
+export type { FunctionSignature, InputSignature, RuntimeFunction } from '@metrichor/jmespath/dist/types';
+export * as NumberScale from './types/number-scale.type';
 import { jmespath as JMESPath } from '@metrichor/jmespath';
 
 import { loadPlugins } from './plugins';

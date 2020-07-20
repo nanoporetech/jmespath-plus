@@ -10,7 +10,7 @@ import {
 } from '@metrichor/jmespath';
 import { ExpressionNodeTree, JSONObject } from '@metrichor/jmespath/dist/types/typings';
 import * as _lodash from 'lodash';
-import { numberScale } from './lib/number-scale';
+import { numberScale } from './utils/number-scale';
 import { SUPPORTED_FUNCTIONS } from './supportedFunctions';
 
 export const loadPlugins = (): boolean => {
