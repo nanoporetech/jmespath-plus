@@ -1,7 +1,7 @@
 // jest.config.js
 module.exports = {
   transform: {
-    ".(ts|tsx)": "ts-jest"
+    ".(ts|js|tsx)": "ts-jest"
   },
   testEnvironment: "node",
   testPathIgnorePatterns: ['.vscode', 'dist', 'node_modules'],

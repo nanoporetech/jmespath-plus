@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   registerFunction,
   TYPE_ANY,
@@ -7,11 +8,13 @@ import {
   TYPE_NUMBER,
   TYPE_OBJECT,
   TYPE_STRING,
+  JSONObject,
+  JSONArray,
 } from '@metrichor/jmespath';
-import { ExpressionNodeTree, JSONObject } from '@metrichor/jmespath/dist/types/typings';
 import * as _lodash from 'lodash';
 import { numberScale } from './utils/number-scale';
 import { SUPPORTED_FUNCTIONS } from './supportedFunctions';
+import { ExpressionNodeTree } from '@metrichor/jmespath/dist/types/Lexer';
 
 export const loadPlugins = (): boolean => {
   registerFunction(
@@ -70,8 +73,8 @@ export const loadPlugins = (): boolean => {
 
   registerFunction(
     'formatNumber',
-    ([toFormat, precision, unit]) => {
-      const formattedNumber = numberScale(toFormat || 0.0, {
+    ([toFormat, precision, unit]: [number, number, string]) => {
+      const formattedNumber: string = numberScale(toFormat || 0.0, {
         precision,
         recursive: 0,
         scale: 'SI',
@@ -112,7 +115,7 @@ export const loadPlugins = (): boolean => {
 
   registerFunction(
     'split',
-    ([splitChar, toSplit]) => {
+    ([splitChar, toSplit]: [string, string]) => {
       return toSplit.split(splitChar);
     },
     [{ types: [TYPE_STRING] }, { types: [TYPE_STRING] }],
@@ -128,7 +131,7 @@ export const loadPlugins = (): boolean => {
 
   registerFunction(
     'format',
-    ([template, templateStringsMap]) => {
+    ([template, templateStringsMap]: [string, JSONObject | JSONArray]) => {
       let newTemplate = template;
       for (const attr in templateStringsMap) {
         const rgx = new RegExp(`\\$\\{${attr}\\}`, 'g');

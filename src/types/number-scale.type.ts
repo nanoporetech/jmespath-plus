@@ -1,9 +1,9 @@
 export interface NumberScaleOptions {
-  precision: number,
-  roundMode: 'even' | 'odd' | 'up' | 'down',
-  scale: string,
-  unit: string,
-  recursive: number
+  precision: number;
+  roundMode?: 'even' | 'odd' | 'up' | 'down';
+  scale: string;
+  unit: string;
+  recursive: number;
 }
 
 export interface ScaleDefinitions {
@@ -13,16 +13,14 @@ export interface ScaleDefinitions {
 export interface Scale {
   list: ScaleUnit[];
   map: {
-    [unit: string]: number
+    [unit: string]: number;
   };
   re: RegExp;
   base: number | string;
 }
 
-export type ScaleUnit = [string, number]
+export type ScaleUnit = [string, number];
 
 export interface ScalePrefixDefinition {
   [unit: string]: number;
 }
-
-

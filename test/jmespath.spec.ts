@@ -105,10 +105,10 @@ describe('parsing', () => {
   });
 });
 
-describe('Searches compiled ast', () =>  {
-  it('search a compiled expression', () =>  {
+describe('Searches compiled ast', () => {
+  it('search a compiled expression', () => {
     const ast = compile('foo.bar');
-    expect(TreeInterpreter.search(ast, {foo: {bar: 'BAZ'}})).toEqual('BAZ');
+    expect(TreeInterpreter.search(ast, { foo: { bar: 'BAZ' } })).toEqual('BAZ');
   });
 });
 
@@ -162,6 +162,14 @@ describe('registerFunction', () => {
     ).toEqual(0.8571428571428571);
   });
   it("won't register a customFunction if one already exists", () => {
-    expect(() => registerFunction('sum', () => {}, [])).toThrow('Function already defined: sum()');
+    expect(() =>
+      registerFunction(
+        'sum',
+        () => {
+          /* EMPTY */
+        },
+        [],
+      ),
+    ).toThrow('Function already defined: sum()');
   });
 });

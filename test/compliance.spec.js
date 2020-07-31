@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const search = require('../src').search;
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { readdirSync, statSync, readFileSync } from 'fs';
+import { basename } from 'path';
+import { search } from '../src';
 
 // Compliance tests that aren't supported yet.
 const notImplementedYet = [];
@@ -9,23 +10,23 @@ function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-const listing = fs.readdirSync('test/compliance');
+const listing = readdirSync('test/compliance');
 for (let i = 0; i < listing.length; i++) {
   const filename = 'test/compliance/' + listing[i];
-  if (
-    fs.statSync(filename).isFile() &&
-    endsWith(filename, '.json') &&
-    !notImplementedYet.includes(path.basename(filename))
-  ) {
+  if (statSync(filename).isFile() && endsWith(filename, '.json') && !notImplementedYet.includes(basename(filename))) {
     addTestSuitesFromFile(filename);
   }
 }
+
+/**
+ *
+ * @param {string} filename
+ */
 function addTestSuitesFromFile(filename) {
   describe(filename, () => {
-    const spec = JSON.parse(fs.readFileSync(filename, 'utf-8'));
-    let errorMsg;
+    const spec = JSON.parse(readFileSync(filename, 'utf-8'));
     for (let i = 0; i < spec.length; i++) {
-      const msg = 'suite ' + i + ' for filename ' + filename;
+      const msg = `suite ${i} for filename ${filename}`;
       describe(msg, () => {
         const given = spec[i].given;
         const cases = spec[i].cases.map(c => [c.expression, c.result, c.error]);

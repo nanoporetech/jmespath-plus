@@ -1,4 +1,10 @@
-import { NumberScaleOptions, ScaleDefinitions, Scale, ScalePrefixDefinition, ScaleUnit} from '../types/number-scale.type'
+import {
+  NumberScaleOptions,
+  ScaleDefinitions,
+  Scale,
+  ScalePrefixDefinition,
+  ScaleUnit,
+} from '../types/number-scale.type';
 
 /**
  * The default options
@@ -12,17 +18,17 @@ import { NumberScaleOptions, ScaleDefinitions, Scale, ScalePrefixDefinition, Sca
  * @see formatPrecision
  * @see round
  */
-var defaultOptions: NumberScaleOptions = {
+const defaultOptions: NumberScaleOptions = {
   //maxExponent: 308,
   //minExponent: -324,
   precision: 2,
   roundMode: 'up',
   scale: 'SI',
   unit: '',
-  recursive: 0
+  recursive: 0,
 };
 /* @private */
-var defaultOptionsKeys = Object.keys(defaultOptions);
+const defaultOptionsKeys = Object.keys(defaultOptions);
 /**
  * All known scales
  *
@@ -32,47 +38,55 @@ var defaultOptionsKeys = Object.keys(defaultOptions);
  * @property {Object}  time      Time Unit scale
  * @property {object}  IEEE1541  IEEE 1541 Units for bytes measurements
  */
-var knownScales: ScaleDefinitions = {
-  SI: buildScale({
-    'y': 1e-24,
-    'z': 1e-21,
-    'a': 1e-18,
-    'f': 1e-15,
-    'p': 1e-12,
-    'n': 1e-9,
-    'µ': 1e-6,
-    'm': 1e-3,
-    '': 1,
-    'k': 1e3,
-    'M': 1e6,
-    'G': 1e9,
-    'T': 1e12,
-    'P': 1e15,
-    'E': 1e18,
-    'Z': 1e21,
-    'Y': 1e24
-  }, 1),
-  time: buildScale({
-    'ns': 1e-9,
-    'ms': 1e-3,
-    's': 1,
-    'm': 60,
-    'h': 3600, // 60*60
-    'd': 86400 // 60*60*24
-  }, 1),
-  IEEE1541: buildScale({
-    '': 1,
-    'Ki': 1e3,
-    'Mi': 1e6,
-    'Gi': 1e9,
-    'Ti': 1e12,
-    'Pi': 1e15,
-    'Ei': 1e18,
-    'Zi': 1e21,
-    'Yi': 1e24
-  }, 0)
+const knownScales: ScaleDefinitions = {
+  SI: buildScale(
+    {
+      y: 1e-24,
+      z: 1e-21,
+      a: 1e-18,
+      f: 1e-15,
+      p: 1e-12,
+      n: 1e-9,
+      µ: 1e-6,
+      m: 1e-3,
+      '': 1,
+      k: 1e3,
+      M: 1e6,
+      G: 1e9,
+      T: 1e12,
+      P: 1e15,
+      E: 1e18,
+      Z: 1e21,
+      Y: 1e24,
+    },
+    1,
+  ),
+  time: buildScale(
+    {
+      ns: 1e-9,
+      ms: 1e-3,
+      s: 1,
+      m: 60,
+      h: 3600, // 60*60
+      d: 86400, // 60*60*24
+    },
+    1,
+  ),
+  IEEE1541: buildScale(
+    {
+      '': 1,
+      Ki: 1e3,
+      Mi: 1e6,
+      Gi: 1e9,
+      Ti: 1e12,
+      Pi: 1e15,
+      Ei: 1e18,
+      Zi: 1e21,
+      Yi: 1e24,
+    },
+    0,
+  ),
 };
-
 
 /**
  * Return an object with all the required options filled out.
@@ -83,8 +97,8 @@ var knownScales: ScaleDefinitions = {
  * @returns {Object}
  */
 function mergeDefaults(options: NumberScaleOptions) {
-  var i;
-  var iLen;
+  let i;
+  let iLen;
 
   options = options || {};
 
@@ -124,7 +138,7 @@ function escapeRegexp(str: string) {
  * @returns {Number}       the value rounded
  */
 function round(mode: string, neg: boolean, value: number): number {
-  var i = value | 0;
+  let i = value | 0;
 
   if (neg) {
     i = -i;
@@ -134,13 +148,15 @@ function round(mode: string, neg: boolean, value: number): number {
   //console.log("??? ROUND", mode, neg, value, i, i & 1);
 
   if (mode === 'even') {
-    if (!neg && (i > value) || (i & 1)) {  // odd
+    if ((!neg && i > value) || i & 1) {
+      // odd
       value = i + 1;
     } else {
       value = i;
     }
   } else if (mode === 'odd') {
-    if (!neg && (i > value) || (i & 1)) {  // odd
+    if ((!neg && i > value) || i & 1) {
+      // odd
       value = i;
     } else {
       value = i + 1;
@@ -167,9 +183,9 @@ function round(mode: string, neg: boolean, value: number): number {
  * @returns {string}
  */
 function formatPrecision(value: number, precision: number): string {
-  var i = value | 0;
+  const i = value | 0;
 
-  if ((i !== value) && Math.max(precision, 0)) {
+  if (i !== value && Math.max(precision, 0)) {
     return Number(value).toFixed(precision);
   } else {
     return String(value);
@@ -186,19 +202,17 @@ function formatPrecision(value: number, precision: number): string {
  * @return {Object}
  */
 function buildScale(prefixes: ScalePrefixDefinition, baseUnitValue: number): Scale {
-  var list: ScaleUnit[] = [];  // Lists prefixes and their factor in ascending order.
-  var map = {};   // Maps from prefixes to their factor.
-  var re: RegExp;         // Regex to parse a value and its associated unit.
-  var unitBase: number | string = '';   // the base unit for this scale
-  var unitTmpValue = Number.MAX_VALUE;
-  var tmp: string[] = [];
-  var sortedTmp: string;
+  const list: ScaleUnit[] = []; // Lists prefixes and their factor in ascending order.
+  const map = {}; // Maps from prefixes to their factor.
+  let unitBase: number | string = ''; // the base unit for this scale
+  let unitTmpValue = Number.MAX_VALUE;
+  const tmp: string[] = [];
 
   baseUnitValue = baseUnitValue || 0;
 
   Object.keys(prefixes).forEach(function (prefix) {
-    var name = prefix;
-    var value = prefixes[prefix];
+    const name = prefix;
+    const value = prefixes[prefix];
 
     list.push([name, value]);
 
@@ -213,19 +227,21 @@ function buildScale(prefixes: ScalePrefixDefinition, baseUnitValue: number): Sca
   });
 
   list.sort(function (a, b) {
-    return (a[1] - b[1]);
+    return a[1] - b[1];
   });
 
-  sortedTmp = tmp.sort(function (a, b) {
-    return b.length - a.length; // Matches longest first.
-  }).join('|');
-  re = new RegExp('^\\s*((?:-)?\\d+(?:\\.\\d+)?)\\s*(' + sortedTmp + ').*?$', 'i');
+  const sortedTmp: string = tmp
+    .sort(function (a, b) {
+      return b.length - a.length; // Matches longest first.
+    })
+    .join('|');
+  const re = new RegExp('^\\s*((?:-)?\\d+(?:\\.\\d+)?)\\s*(' + sortedTmp + ').*?$', 'i');
 
   return {
     list: list,
     map: map,
     re: re,
-    base: unitBase
+    base: unitBase,
   };
 }
 
@@ -241,10 +257,10 @@ function buildScale(prefixes: ScalePrefixDefinition, baseUnitValue: number): Sca
 function findPrefix(list: any[], value: number): any[] {
   /* jshint bitwise: false */
 
-  var low = 0;
-  var high = list.length - 1;
+  let low = 0;
+  let high = list.length - 1;
 
-  var mid, current;
+  let mid, current;
   while (low !== high) {
     mid = (low + high + 1) >> 1;
     current = list[mid][1];
@@ -269,37 +285,33 @@ function findPrefix(list: any[], value: number): any[] {
  * @returns {string}           the scaled number
  */
 function _numberScale(num: number, options: NumberScaleOptions): string | string[] {
-  var neg;
-  var scale;
-  var prefix;
-  var roundModifier;
-  var value;
-  var remainder;
+  let value;
+  let remainder;
 
   options = mergeDefaults(options);
 
   // Ensures `value` is a number (or NaN).
   value = Number(num);
-  scale = knownScales[options.scale];
+  const scale = knownScales[options.scale];
 
   // If `value` is 0 or NaN.
   if (!value) {
-    return '0' + scale.base + options.unit;
+    return `0${scale.base}${options.unit}`;
   }
 
-  neg = value < 0;
+  const neg = value < 0;
   value = Math.abs(value);
 
-  prefix = findPrefix(scale.list, value);
-  roundModifier = +('1e' + Math.max(options.precision, 0));
+  const prefix: number[] = findPrefix(scale.list, value);
+  const roundModifier = +`1e${Math.max(options.precision, 0)}`;
 
-  value = round(options.roundMode, neg, value * roundModifier / prefix[1]) / roundModifier;
+  value = round(options.roundMode as string, neg, (value * roundModifier) / prefix[1]) / roundModifier;
 
   if (options.recursive) {
     --options.recursive;
 
     value = value | 0;
-    remainder = Math.abs(num) - (value * prefix[1]);
+    remainder = Math.abs(num) - value * prefix[1];
 
     value = String(value);
   } else {
@@ -310,13 +322,12 @@ function _numberScale(num: number, options: NumberScaleOptions): string | string
     if (value !== '0') {
       value = '-' + value;
     }
-    remainder = remainder && -remainder || 0;
+    remainder = (remainder && -remainder) || 0;
   }
 
-  value = value + prefix[0] + options.unit;
+  value = `${value}${prefix[0]}${options.unit}`;
 
   if (remainder && prefix !== scale.list[0]) {
-
     remainder = _numberScale(remainder, options);
 
     if (Array.isArray(remainder)) {
@@ -339,8 +350,6 @@ function _numberScale(num: number, options: NumberScaleOptions): string | string
  * @return {(Number|NaN)}            the parsed value as a number
  */
 function parseScale(value: string | string[], options: NumberScaleOptions): number {
-  var scale;
-  var matches;
   let returnedValue: number;
 
   if (Array.isArray(value)) {
@@ -351,16 +360,16 @@ function parseScale(value: string | string[], options: NumberScaleOptions): numb
 
   options = mergeDefaults(options);
 
-  scale = knownScales[options.scale];
+  const scale = knownScales[options.scale];
 
-  matches = String(value).match(scale.re);
+  const matches = scale.re.exec(`${value}`);
 
   if (matches) {
     if (!matches[2]) {
-      matches[2] = '' + scale.base;
+      matches[2] = `${scale.base}`;
     }
 
-    returnedValue = ((matches as any)[1]) * scale.map[matches[2]];
+    returnedValue = (matches as any)[1] * scale.map[matches[2]];
   } else {
     returnedValue = NaN;
   }
@@ -381,10 +390,8 @@ function defineScale(name: string, prefixes: ScalePrefixDefinition, baseUnitValu
   numberScale.scales[name] = name;
 }
 
-
 // Scale Aliasses
 knownScales['IEEE-1541'] = knownScales.IEEE1541;
-
 
 /**
  * expose (readonly) API
@@ -404,8 +411,8 @@ export const numberScale = Object.defineProperties(_numberScale, {
     enumerable: true,
     writable: false,
     value: {
-      default: defaultOptions
-    }
+      default: defaultOptions,
+    },
   },
   scales: {
     configurable: false,
@@ -414,18 +421,18 @@ export const numberScale = Object.defineProperties(_numberScale, {
     value: Object.keys(knownScales).reduce(function (scales, scale) {
       scales[scale] = scale;
       return scales;
-    }, {})
+    }, {}),
   },
   defineScale: {
     configurable: false,
     enumerable: true,
     writable: false,
-    value: defineScale
+    value: defineScale,
   },
   parse: {
     configurable: false,
     enumerable: true,
     writable: false,
-    value: parseScale
-  }
+    value: parseScale,
+  },
 });

@@ -36,7 +36,7 @@ describe('should load plugins', () => {
     });
   });
 
-  it('applies the `mode` function', async () => {
+  it('applies the `mode` function', () => {
     // Calculate the most common value
 
     let returnValue = search([-1, 2.21, -3.2, 4.2, 5.2, 2.21, 3.3, 4.11, 1.33, 5.1, 2.21, 3.2, 1.11, 5.67], 'mode(@)');
@@ -49,7 +49,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual([10, 11]);
   });
 
-  it('applies the `median` function', async () => {
+  it('applies the `median` function', () => {
     // Calculate the most common value
     let returnValue = search(
       [-1, 2.21, -3.2, 4.2, 5.2, 2.21, 3.3, 4.11, 1.33, 5.1, 2.21, 3.2, 1.11, 5.67],
@@ -66,7 +66,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual(10.5);
   });
 
-  it('applies the `mod` function', async () => {
+  it('applies the `mod` function', () => {
     // Calculate the modulus of two numbers
     let returnValue = search([27, 2], 'mod([0], [1])');
     expect(returnValue).toStrictEqual(1);
@@ -74,7 +74,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual(0);
   });
 
-  it('applies the `divide` function', async () => {
+  it('applies the `divide` function', () => {
     // Calculate the division of two numbers
     let returnValue = search([27, 2], 'divide([0], [1])');
     expect(returnValue).toStrictEqual(13.5);
@@ -82,13 +82,13 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual(13);
   });
 
-  it('applies the `split` function', async () => {
+  it('applies the `split` function', () => {
     // Calculate the division of two numbers
-    let returnValue = search('Foo-bar_fez-baz', 'split(`-`, @)');
+    const returnValue = search('Foo-bar_fez-baz', 'split(`-`, @)');
     expect(returnValue).toStrictEqual(['Foo', 'bar_fez', 'baz']);
   });
 
-  it('applies the `format` function', async () => {
+  it('applies the `format` function', () => {
     // Calculate the division of two numbers
     let returnValue = search(['Mr', 'zebra'], 'format(`Hello ${100} ${animal}`, @)');
     expect(returnValue).toStrictEqual('Hello ${100} ${animal}');
@@ -100,9 +100,9 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual('Hello  zebra');
   });
 
-  it('applies the `entries` function', async () => {
+  it('applies the `entries` function', () => {
     // Calculate the division of two numbers
-    let returnValue = search(
+    const returnValue = search(
       {
         category_1: [{ count: 10, name: 'medium' }],
         category_2: [{ count: 40, name: 'high' }],
@@ -115,13 +115,13 @@ describe('should load plugins', () => {
     ]);
   });
 
-  it('applies the `mean` function', async () => {
+  it('applies the `mean` function', () => {
     // Load when there's nothing but ID given
     const returnValue = search([13, 18, 13, 14, 13, 16, 14, 21, 13], 'mean(@)');
     expect(returnValue).toStrictEqual(15);
   });
 
-  it('applies the `uniq` function', async () => {
+  it('applies the `uniq` function', () => {
     // Calculate the most common value
     let returnValue = search([1, 2, 4, 3, 2, 3, 4, 1, 2, 3, 2, 3, 3, 4, 2, 1], 'uniq(@)');
     expect(returnValue).toStrictEqual([1, 2, 4, 3]);
@@ -149,7 +149,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual(['label-2', 'label-4', 'label-3', 'label-1']);
   });
 
-  it('applies the `formatNumber` function', async () => {
+  it('applies the `formatNumber` function', () => {
     // Load when there's nothing but ID given
     let returnValue = search(123456789.123456789, 'formatNumber(@, `2`, `base`)');
     expect(returnValue).toStrictEqual('123.46Mbases');
@@ -173,7 +173,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual('1Mbase');
   });
 
-  it('applies the `toFixed` function', async () => {
+  it('applies the `toFixed` function', () => {
     // Load when there's nothing but ID given
     let returnValue = search(123.45678, 'toFixed(@, `2`)');
     expect(returnValue).toStrictEqual('123.46');
@@ -181,7 +181,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual('0.00');
   });
 
-  it('handles `flatMapValues` JMESPath function extension', async () => {
+  it('handles `flatMapValues` JMESPath function extension', () => {
     // Calculate the most common value
     let returnValue = search({ a: [1, 3, 5], b: [2, 4, 6] }, 'flatMapValues(@)');
     expect(returnValue).toStrictEqual([
@@ -226,25 +226,25 @@ describe('should load plugins', () => {
     ]);
   });
 
-  it('handles `toUpperCase` JMESPath function extension', async () => {
+  it('handles `toUpperCase` JMESPath function extension', () => {
     // Calculate the most common value
     const returnValue = search(`Foo bar`, 'toUpperCase(@)');
     expect(returnValue).toStrictEqual('FOO BAR');
   });
 
-  it('handles `toLowerCase` JMESPath function extension', async () => {
+  it('handles `toLowerCase` JMESPath function extension', () => {
     // Calculate the most common value
     const returnValue = search(`Foo bar`, 'toLowerCase(@)');
     expect(returnValue).toStrictEqual('foo bar');
   });
 
-  it('handles `trim` JMESPath function extension', async () => {
+  it('handles `trim` JMESPath function extension', () => {
     // Calculate the most common value
     const returnValue = search(`\n  Foo bar \r`, 'trim(@)');
     expect(returnValue).toStrictEqual('Foo bar');
   });
 
-  it('handles `groupBy` JMESPath function extension', async () => {
+  it('handles `groupBy` JMESPath function extension', () => {
     let returnValue = search(
       [
         { a: 1, b: 2 },
@@ -299,7 +299,7 @@ describe('should load plugins', () => {
     }
   });
 
-  it('handles `combine` JMESPath function extension', async () => {
+  it('handles `combine` JMESPath function extension', () => {
     // Calculate the most common value
     const returnValue = search(
       [
@@ -328,7 +328,7 @@ describe('should load plugins', () => {
     });
   });
 
-  it('handles `_` JMESPath function extension', async () => {
+  it('handles `_` JMESPath function extension', () => {
     const returnValue = search(
       [
         [1, 3, 5],
@@ -343,7 +343,7 @@ describe('should load plugins', () => {
     ]);
   });
 
-  it('handles `_fromPairs` JMESPath function extension', async () => {
+  it('handles `_fromPairs` JMESPath function extension', () => {
     const returnValue = search(
       [
         ['a', 1],
@@ -354,7 +354,7 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual({ a: 1, b: 2 });
   });
 
-  it('handles `_groupBy` JMESPath function extension', async () => {
+  it('handles `_groupBy` JMESPath function extension', () => {
     const returnValue = search(['one', 'two', 'three'], '_groupBy(@, `length`)');
     expect(returnValue).toStrictEqual({
       3: ['one', 'two'],
@@ -362,14 +362,14 @@ describe('should load plugins', () => {
     });
   });
 
-  it('handles `_maxBy` JMESPath function extension', async () => {
+  it('handles `_maxBy` JMESPath function extension', () => {
     const returnValue = search([{ n: 1 }, { n: 2 }], '_maxBy(@, `n`)');
     expect(returnValue).toStrictEqual({
       n: 2,
     });
   });
 
-  it('handles `_zip` JMESPath function extension', async () => {
+  it('handles `_zip` JMESPath function extension', () => {
     const returnValue = search(
       [
         ['a', 'b'],
