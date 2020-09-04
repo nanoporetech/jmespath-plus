@@ -296,7 +296,7 @@ function _numberScale(num: number, options: NumberScaleOptions): string | string
 
   // If `value` is 0 or NaN.
   if (!value) {
-    return `0${scale.base} ${options.unit}`;
+    return `0${scale.base}${(options.unit && ' ' + options.unit) || options.unit}`;
   }
 
   const neg = value < 0;
@@ -325,7 +325,7 @@ function _numberScale(num: number, options: NumberScaleOptions): string | string
     remainder = (remainder && -remainder) || 0;
   }
 
-  value = `${value}${prefix[0]} ${options.unit}`;
+  value = `${value}${prefix[0] ? ' ' : ''}${prefix[0]}${options.unit}`;
 
   if (remainder && prefix !== scale.list[0]) {
     remainder = _numberScale(remainder, options);

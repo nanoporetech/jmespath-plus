@@ -152,25 +152,35 @@ describe('should load plugins', () => {
   it('applies the `formatNumber` function', () => {
     // Load when there's nothing but ID given
     let returnValue = search(123456789.123456789, 'formatNumber(@, `2`, `base`)');
-    expect(returnValue).toStrictEqual('123.46Mbases');
+    expect(returnValue).toStrictEqual('123.46 Mbases');
     returnValue = search(123456789.123456789, 'formatNumber(@, `1`, `base`)');
-    expect(returnValue).toStrictEqual('123.5Mbases');
+    expect(returnValue).toStrictEqual('123.5 Mbases');
+    returnValue = search(123456789.123456789, 'formatNumber(@, `1`, ``)');
+    expect(returnValue).toStrictEqual('123.5 M');
+    returnValue = search(123.45, 'formatNumber(@, `1`, ``)');
+    expect(returnValue).toStrictEqual('123.5');
     returnValue = search(123456789.123456789, 'formatNumber(@, `0`, `base`)');
-    expect(returnValue).toStrictEqual('124Mbases');
+    expect(returnValue).toStrictEqual('124 Mbases');
     returnValue = search(0, 'formatNumber(@, `2`, ``)');
     expect(returnValue).toStrictEqual('0');
+    returnValue = search(NaN, 'formatNumber(@, `2`, ``)');
+    expect(returnValue).toStrictEqual('0');
+    returnValue = search(0, 'formatNumber(@, `2`, `foo`)');
+    expect(returnValue).toStrictEqual('0 foos');
+    returnValue = search(NaN, 'formatNumber(@, `2`, `foo`)');
+    expect(returnValue).toStrictEqual('0 foos');
 
     // Test singular
     returnValue = search(1000.1, 'formatNumber(@, `1`, `base`)');
-    expect(returnValue).toStrictEqual('1.1kbases');
+    expect(returnValue).toStrictEqual('1.1 kbases');
     returnValue = search(1000.1, 'formatNumber(@, `0`, `base`)');
-    expect(returnValue).toStrictEqual('2kbases');
+    expect(returnValue).toStrictEqual('2 kbases');
     returnValue = search(1000.0, 'formatNumber(@, `0`, `base`)');
-    expect(returnValue).toStrictEqual('1kbase');
+    expect(returnValue).toStrictEqual('1 kbase');
     returnValue = search(1001, 'formatNumber(@, `1`, `base`)');
-    expect(returnValue).toStrictEqual('1.1kbases');
+    expect(returnValue).toStrictEqual('1.1 kbases');
     returnValue = search(1e6, 'formatNumber(@, `0`, `base`)');
-    expect(returnValue).toStrictEqual('1Mbase');
+    expect(returnValue).toStrictEqual('1 Mbase');
   });
 
   it('applies the `toFixed` function', () => {
