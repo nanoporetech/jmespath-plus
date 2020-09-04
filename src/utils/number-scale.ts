@@ -324,8 +324,9 @@ function _numberScale(num: number, options: NumberScaleOptions): string | string
     }
     remainder = (remainder && -remainder) || 0;
   }
+  const formattedUnit = `${prefix[0]}${options.unit}`;
 
-  value = `${value}${prefix[0] ? ' ' : ''}${prefix[0]}${options.unit}`;
+  value = `${value}${formattedUnit ? ' ' : ''}${formattedUnit}`;
 
   if (remainder && prefix !== scale.list[0]) {
     remainder = _numberScale(remainder, options);

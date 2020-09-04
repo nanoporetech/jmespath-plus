@@ -159,6 +159,8 @@ describe('should load plugins', () => {
     expect(returnValue).toStrictEqual('123.5 M');
     returnValue = search(123.45, 'formatNumber(@, `1`, ``)');
     expect(returnValue).toStrictEqual('123.5');
+    returnValue = search(123.45, 'formatNumber(@, `1`, `base`)');
+    expect(returnValue).toStrictEqual('123.5 bases');
     returnValue = search(123456789.123456789, 'formatNumber(@, `0`, `base`)');
     expect(returnValue).toStrictEqual('124 Mbases');
     returnValue = search(0, 'formatNumber(@, `2`, ``)');
