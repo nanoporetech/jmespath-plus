@@ -340,6 +340,48 @@ describe('should load plugins', () => {
     });
   });
 
+  it('handles `toJSON` JMESPath function extension', () => {
+    expect(
+      search(
+        {
+          foo: 6,
+          bar: 7,
+        },
+        'toJSON([foo, bar], `null`, `2`)',
+      ),
+    ).toEqual(`[\n  6,\n  7\n]`);
+    expect(
+      search(
+        {
+          foo: 6,
+          bar: 7,
+        },
+        'toJSON([foo, bar])',
+      ),
+    ).toEqual('[6,7]');
+    expect(
+      search(
+        {
+          foo: {
+            bar: 1,
+          },
+          baz: {
+            bar: 10,
+          },
+        },
+        'toJSON(@, [`baz`, `bar`], `\\t`)',
+      ),
+    ).toEqual(`{\n\t"baz": {\n\t\t"bar": 10\n\t}\n}`);
+  });
+
+  it('handles `fromJSON` JMESPath function extension', () => {
+    expect(search('{"foo": "bar"}', 'fromJSON(@)')).toEqual({ foo: 'bar' });
+    expect(search('true', 'fromJSON(@)')).toEqual(true);
+    expect(search('"foo"', 'fromJSON(@)')).toEqual('foo');
+    expect(search('[1, 5, "false"]', 'fromJSON(@)')).toEqual([1, 5, 'false']);
+    expect(search('null', 'fromJSON(@)')).toEqual(null);
+  });
+
   it('handles `_` JMESPath function extension', () => {
     const returnValue = search(
       [
@@ -394,5 +436,86 @@ describe('should load plugins', () => {
       ['a', 1, true],
       ['b', 2, false],
     ]);
+  });
+
+  it('handles `_chunk` JMESPath function extension', () => {
+    const returnValue = search(['a', 'b', 'c', 'd'], '_chunk(@, `2`)');
+    expect(returnValue).toStrictEqual([
+      ['a', 'b'],
+      ['c', 'd'],
+    ]);
+  });
+
+  it('handles `_compact` JMESPath function extension', () => {
+    const returnValue = search([0, 1, false, 2, '', 3], '_compact(@)');
+    expect(returnValue).toStrictEqual([1, 2, 3]);
+  });
+
+  it('handles `_concat` JMESPath function extension', () => {
+    const returnValue = search([1], '_concat(@, `2`, [`3`], [[`4`]], `foo`)');
+    expect(returnValue).toStrictEqual([1, 2, 3, [4], 'foo']);
+    expect(search([1, 2, 3], '_concat(@)')).toStrictEqual([1, 2, 3]);
+  });
+
+  it('handles `_difference` JMESPath function extension', () => {
+    const returnValue = search([2, 1], '_difference(@, [`2`, `3`])');
+    expect(returnValue).toStrictEqual([1]);
+    expect(search([1, 2, 3], '_difference(@)')).toStrictEqual([1, 2, 3]);
+  });
+
+  it('handles `_differenceBy` JMESPath function extension', () => {
+    const returnValue = search([{ x: 2 }, { x: 1 }], '_differenceBy(@, [{ x: `1` }], `x`)');
+    expect(returnValue).toStrictEqual([{ x: 2 }]);
+  });
+
+  it('handles `_drop` JMESPath function extension', () => {
+    expect(search([1, 2, 3], '_drop(@)')).toStrictEqual([2, 3]);
+    expect(search([1, 2, 3], '_drop(@, `2`)')).toStrictEqual([3]);
+    expect(search([1, 2, 3], '_drop(@, `5`)')).toStrictEqual([]);
+    expect(search([1, 2, 3], '_drop(@, `0`)')).toStrictEqual([1, 2, 3]);
+  });
+
+  it('handles `_dropRight` JMESPath function extension', () => {
+    expect(search([1, 2, 3], '_dropRight(@)')).toStrictEqual([1, 2]);
+    expect(search([1, 2, 3], '_dropRight(@, `2`)')).toStrictEqual([1]);
+    expect(search([1, 2, 3], '_dropRight(@, `5`)')).toStrictEqual([]);
+    expect(search([1, 2, 3], '_dropRight(@, `0`)')).toStrictEqual([1, 2, 3]);
+  });
+
+  it('handles `_dropRightWhile` JMESPath function extension', () => {
+    const users = [
+      { user: 'barney', active: true },
+      { user: 'fred', active: false },
+      { user: 'pebbles', active: false },
+    ];
+    expect(search(users, '_dropRightWhile(@)')).toStrictEqual([]);
+    expect(search(users, '_dropRightWhile(@, { user: `pebbles`, active: `false` })')).toStrictEqual([
+      { user: 'barney', active: true },
+      { user: 'fred', active: false },
+    ]);
+    expect(search(users, "_dropRightWhile(@, ['active', `false`])")).toStrictEqual([{ user: 'barney', active: true }]);
+    expect(search(users, "_dropRightWhile(@, 'active')")).toStrictEqual(users);
+  });
+
+  it('handles `_dropWhile` JMESPath function extension', () => {
+    const users = [
+      { user: 'barney', active: false },
+      { user: 'fred', active: false },
+      { user: 'pebbles', active: true },
+    ];
+    expect(search(users, '_dropWhile(@)')).toStrictEqual([]);
+    expect(search(users, "_dropWhile(@, { user: 'barney', active: `false` })")).toStrictEqual([
+      { user: 'fred', active: false },
+      { user: 'pebbles', active: true },
+    ]);
+    expect(search(users, "_dropWhile(@, ['active', `false`])")).toStrictEqual([{ user: 'pebbles', active: true }]);
+    expect(search(users, "_dropWhile(@, 'active')")).toStrictEqual(users);
+  });
+
+  it('handles `_fill` JMESPath function extension', () => {
+    const array = [1, 2, 3];
+    expect(search(array, '_fill(@, `a`)')).toStrictEqual(['a', 'a', 'a']);
+    expect(search(array, '_fill(@, `2`)')).toStrictEqual([2, 2, 2]);
+    expect(search([4, 6, 8, 10], "_fill(@, '*', `1`, `3`)")).toStrictEqual([4, '*', '*', 10]);
   });
 });

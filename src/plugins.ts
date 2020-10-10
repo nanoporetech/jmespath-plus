@@ -10,6 +10,9 @@ import {
   TYPE_STRING,
   JSONObject,
   JSONArray,
+  TYPE_BOOLEAN,
+  TYPE_NULL,
+  TYPE_ARRAY_STRING,
 } from '@metrichor/jmespath';
 import * as _lodash from 'lodash';
 import { numberScale } from './utils/number-scale';
@@ -235,13 +238,33 @@ export const loadPlugins = (): boolean => {
     ],
   );
 
-  for (const key of SUPPORTED_FUNCTIONS) {
+  registerFunction(
+    'toJSON',
+    ([value, replacer, space]: [JSONObject, null | string[], number | string]) => {
+      return JSON.stringify(value, replacer ?? null, space ?? 0);
+    },
+    [
+      { types: [TYPE_OBJECT, TYPE_ARRAY, TYPE_STRING, TYPE_BOOLEAN, TYPE_NULL, TYPE_NUMBER] },
+      { types: [TYPE_NULL, TYPE_ARRAY_STRING], optional: true },
+      { types: [TYPE_NUMBER, TYPE_STRING], optional: true },
+    ],
+  );
+
+  registerFunction(
+    'fromJSON',
+    ([value]: [string]) => {
+      return JSON.parse(value);
+    },
+    [{ types: [TYPE_STRING] }],
+  );
+
+  for (const [key, signature] of SUPPORTED_FUNCTIONS) {
     registerFunction(
       `_${key}`,
       (resolvedArgs: any) => {
         return resolvedArgs.length > 1 ? _lodash[key](...resolvedArgs) : _lodash[key](resolvedArgs[0]);
       },
-      [
+      signature ?? [
         {
           types: [TYPE_ANY],
           variadic: true,
@@ -249,5 +272,6 @@ export const loadPlugins = (): boolean => {
       ],
     );
   }
+
   return true;
 };

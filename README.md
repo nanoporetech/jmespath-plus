@@ -20,8 +20,10 @@ npm install @metrichor/jmespath-plus
 ## EXTENDED FUNCTIONS
 
 - All builtin functions described in the [JMESPath spec](https://jmespath.org/specification.html#built-in-functions)
-- ** ALL `LODASH` FUNCTIONS ** - see [CAVEAT](#CAVEAT) below
+- ** MOST `LODASH` FUNCTIONS ** - see [CAVEAT](#CAVEAT) below
 - Custom functions:
+  - toJSON - Convert JS objects to JSON strings
+  - fromJSON - Convert JSON strings to JS objects
   - mean - Calculate the mean/average of an array of numbers
   - mode - Calculate the most common number in an array of numbers
   - median - Calculate the middle value from an array of numbers

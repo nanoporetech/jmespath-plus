@@ -157,9 +157,9 @@ describe('registerFunction', () => {
           foo: 6,
           bar: 7,
         },
-        '_divide(foo, bar)',
+        'modulus(foo, bar)',
       ),
-    ).toEqual(0.8571428571428571);
+    ).toEqual(6);
   });
   it("won't register a customFunction if one already exists", () => {
     expect(() =>
