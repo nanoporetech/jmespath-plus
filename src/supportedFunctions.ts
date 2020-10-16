@@ -419,7 +419,10 @@ export const SUPPORTED_FUNCTIONS: [string, InputSignature[] | null][] = [
     ],
   ],
   ['unset', [{ types: [TYPE_OBJECT] }, { types: [TYPE_ARRAY, TYPE_STRING] }]],
-  ['update', [{ types: [TYPE_OBJECT] }, { types: [TYPE_ARRAY, TYPE_STRING] }, { types: TYPE_OBJECT, optional: true }]],
+  [
+    'update',
+    [{ types: [TYPE_OBJECT] }, { types: [TYPE_ARRAY, TYPE_STRING] }, { types: [TYPE_OBJECT], optional: true }],
+  ],
   // ['updateWith', null],
   ['values', [{ types: [TYPE_OBJECT, TYPE_STRING] }]],
   // ['valuesIn', null],
