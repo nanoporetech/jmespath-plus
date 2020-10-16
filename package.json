@@ -1,7 +1,7 @@
 {
   "name": "@metrichor/jmespath-plus",
   "description": "JMESPath but better",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "author": {
     "name": "Oxford Nanopore Technologies",
     "email": "support@nanoporetech.com",
@@ -45,7 +45,7 @@
     "build": "tsc --outDir dist/lib -d --module commonjs --declarationDir dist/types && rollup -c rollup.config.ts",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch",
+    "test:watch": "npm run test -- --watch",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node scripts/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",

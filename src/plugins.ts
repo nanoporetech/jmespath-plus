@@ -19,7 +19,28 @@ import { numberScale } from './utils/number-scale';
 import { SUPPORTED_FUNCTIONS } from './supportedFunctions';
 import { ExpressionNodeTree } from '@metrichor/jmespath/dist/types/Lexer';
 
-export const loadPlugins = (): boolean => {
+type UnknownFunction = (this: ThisType<unknown>, ...args: unknown[]) => unknown;
+
+export const loadPlugins = () => {
+  registerFunction(
+    'as_regexp',
+    ([pattern, flags = '']: [string, string]): RegExp => {
+      return new RegExp(pattern, flags);
+    },
+    [{ types: [TYPE_STRING] }, { types: [TYPE_STRING], optional: true }],
+  );
+
+  registerFunction(
+    'as_lambda',
+    ([fnString]: [string]): UnknownFunction => {
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval
+      const lambdaConstructor = new Function(`return ${fnString}`);
+      const lambda = lambdaConstructor.call({}).bind({});
+      return lambda;
+    },
+    [{ types: [TYPE_STRING] }],
+  );
+
   registerFunction(
     'mean',
     ([vector]: [number[]]) => {

@@ -3,7 +3,7 @@
 # @metrichor/jmespath-plus
 
 
-@metrichor/jmespath-plus extends [@metrichor/jmespath](https://www.npmjs.com/package/@metrichor/jmespath) with all `lodash` functions and a few extra typed functions.
+@metrichor/jmespath-plus extends [@metrichor/jmespath](https://www.npmjs.com/package/@metrichor/jmespath) with `lodash` functions that map well to JSON objects as well as a few extra typed functions that are native to this library.
 
 JMESPath is a query language for JSON. It will take a JSON document
 as input and transform it into another JSON document
@@ -11,42 +11,53 @@ given a JMESPath expression.
 
 Where this library departs is by adding a number of extra functions to the JMESPath expressions that are helpful if you require more powerful JSON transforms of simpler expressions.
 
+---
+
 ## INSTALLATION
 
 ```
-npm install @metrichor/jmespath-plus
+npm i @metrichor/jmespath-plus
 ```
 
-## EXTENDED FUNCTIONS
+---
 
-- All builtin functions described in the [JMESPath spec](https://jmespath.org/specification.html#built-in-functions)
-- ** MOST `LODASH` FUNCTIONS ** - see [CAVEAT](#CAVEAT) below
-- Custom functions:
-  - toJSON - Convert JS objects to JSON strings
-  - fromJSON - Convert JSON strings to JS objects
-  - mean - Calculate the mean/average of an array of numbers
-  - mode - Calculate the most common number in an array of numbers
-  - median - Calculate the middle value from an array of numbers
-  - toFixed - Set the precision of a float
-  - formatNumber - Format a number with units at a set precision
-  - uniq - De-duplicate a list of values
-  - mod - Calculate the modulus of two numbers
-  - divide - Divide two numbers
-  - split - Split a string on a given character or character sequence
-  - entries - Flatten a hash into key, value tuples
-  - format - Format a string given a template and input values (array/object)
-  - flatMapValue - Flatten all values in a object into key, value tuples
-  - toUpperCase - Uppercase (locale based) all characters in a string
-  - toLowerCase - Lowercase (locale based) all characters in a string
-  - trim - Remove flanking whitespace from a string
-  - groupBy - Group an array of objects by a value or expression
-  - combine - Create an object from a tuple of key, value pairs (inverse of entries)
+## JMESPATH BUILT-INS
 
+The current [JMESPath spec](https://jmespath.org/specification.html#built-in-functions) already describes a number of built-in functions that my be sufficient. These are already included in this library
 
-## CAVEAT
+---
 
-All lodash functions are registered as JMESPath function expressions **HOWEVER**:
-1. They are prefixed with an `_` character to ensure no name clashes and overwrites for example the [lodash zip] function:
+## __JMESPATH-PLUS__ EXTENSIONS
+
+  - `as_lambda` - Convert strings to anonymous functions to be used as lodash predicates
+  - `as_regexp` - Convert strings to `Regexp` objects to be used as lodash arguments
+  - `toJSON` - Convert JS objects to JSON strings
+  - `fromJSON` - Convert JSON strings to JS objects
+  - `mean` - Calculate the mean/average of an array of numbers
+  - `mode` - Calculate the most common number in an array of numbers
+  - `median` - Calculate the middle value from an array of numbers
+  - `toFixed` - Set the precision of a float
+  - `formatNumber` - Format a number with units at a set precision
+  - `uniq` - De-duplicate a list of values
+  - `mod` - Calculate the modulus of two numbers
+  - `divide` - Divide two numbers
+  - `split` - Split a string on a given character or character sequence
+  - `entries` - Flatten a hash into key, value tuples
+  - `format` - Format a string given a template and input values (array/object)
+  - `flatMapValue` - Flatten all values in a object into key, value tuples
+  - `toUpperCase` - Uppercase (locale based) all characters in a string
+  - `toLowerCase` - Lowercase (locale based) all characters in a string
+  - `trim` - Remove flanking whitespace from a string
+  - `groupBy` - Group an array of objects by a value or expression
+  - `combine` - Create an object from a tuple of key, value pairs (inverse of entries)
+
+---
+
+## __LODASH__ EXTENSIONS
+
+Most Lodash functions that apply to JSON types are included as JMESPath function expressions and are __prefixed with an `_` character__ to ensure no name clashes and overwrites with the built-in functions.
+
+For example the [lodash zip] function:
 
 ```tsx
 /* In Javascript this looks as follows... */
@@ -63,10 +74,31 @@ search([['a', 'b'], [1, 2], [true, false]], '_zip([0], [1], [2])')
 
 ```
 
-2. **`THEY WON'T ALL WORK!!!!`**
+**`NOT ALL LODASH FUNCTIONS HAVE BEEN INCLUDED!!!!`**
 
-Some lodash functions require predicates as arguments that are JS functions. This is obviously not possible to express in a JMESPath expression. `lodash` functions are also untyped as they have been registered in the most generic way possible. `lodash` support is merely a convenience and "proper" JMESPath function extensions will be added over time as use cases arise.
+Many lodash functions don't necessarily map to JSON objects. For a complete list of the __`165 lodash`__ functions that are included in jmespath-plus go [HERE](./LODASH_SUPPORT.md)
 
+### DEALING WITH PREDICATES
+
+Many lodash functions accept function predicates as arguments. This is still possible in jmespath-plus by using a new built-in function that converts strings to functions (`as_lambda`). For example:
+
+```javascript
+
+// `_findKey` JMESPath function extension
+
+const { search }  = require('@metrichor/jmespath-plus');
+
+const users = {
+  barney: { age: 36, active: true },
+  fred: { age: 40, active: false },
+  pebbles: { age: 1, active: true },
+};
+
+assert(search(users, "_findKey(@, as_lambda('o => o.age < 40'))") === 'barney');
+
+```
+
+---
 
 ## USAGE
 
