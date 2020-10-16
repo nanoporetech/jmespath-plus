@@ -14,15 +14,15 @@ describe('LODASH EXTENSIONS (OBJECT)', () => {
     expect(search(object, "_at(@, ['a[0].b.c', 'a[1]'])")).toStrictEqual([3, 4]);
   });
 
-  it('handles `_defaults` JMESPath function extension', () => {
-    const array = [{ a: 1 }, { b: 2 }, { a: 3 }];
-    expect(search(array, '_defaults([0], [1], [2])')).toStrictEqual({ a: 1, b: 2 });
-  });
+  // it('handles `_defaults` JMESPath function extension', () => {
+  //   const array = [{ a: 1 }, { b: 2 }, { a: 3 }];
+  //   expect(search(array, '_defaults([0], [1], [2])')).toStrictEqual({ a: 1, b: 2 });
+  // });
 
-  it('handles `_defaultsDeep` JMESPath function extension', () => {
-    const array = [{ a: { b: 2 } }, { a: { b: 1, c: 3 } }];
-    expect(search(array, '_defaultsDeep([0], [1])')).toStrictEqual({ a: { b: 2, c: 3 } });
-  });
+  // it('handles `_defaultsDeep` JMESPath function extension', () => {
+  //   const array = [{ a: { b: 2 } }, { a: { b: 1, c: 3 } }];
+  //   expect(search(array, '_defaultsDeep([0], [1])')).toStrictEqual({ a: { b: 2, c: 3 } });
+  // });
 
   it('handles `_findKey` JMESPath function extension', () => {
     const users = {
@@ -102,21 +102,21 @@ describe('LODASH EXTENSIONS (OBJECT)', () => {
     expect(search(users, "_mapValues(@, 'age')")).toStrictEqual({ fred: 40, pebbles: 1 });
   });
 
-  it('handles `_merge` JMESPath function extension', () => {
-    const object = {
-      a: [{ b: 2 }, { d: 4 }],
-    };
+  // it('handles `_merge` JMESPath function extension', () => {
+  //   const object = {
+  //     a: [{ b: 2 }, { d: 4 }],
+  //   };
 
-    const other = {
-      a: [{ c: 3 }, { e: 5 }],
-    };
-    expect(search([object, other], '_merge([0], [1])')).toStrictEqual({
-      a: [
-        { b: 2, c: 3 },
-        { d: 4, e: 5 },
-      ],
-    });
-  });
+  //   const other = {
+  //     a: [{ c: 3 }, { e: 5 }],
+  //   };
+  //   expect(search([object, other], '_merge([0], [1])')).toStrictEqual({
+  //     a: [
+  //       { b: 2, c: 3 },
+  //       { d: 4, e: 5 },
+  //     ],
+  //   });
+  // });
 
   it('handles `_omit` JMESPath function extension', () => {
     const object = { a: 1, b: '2', c: 3 };
