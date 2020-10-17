@@ -1,7 +1,7 @@
 {
   "name": "@metrichor/jmespath-plus",
-  "description": "JMESPath but better",
-  "version": "0.3.0",
+  "description": "Level-up your JMESPath expressions!",
+  "version": "0.3.1",
   "author": {
     "name": "Oxford Nanopore Technologies",
     "email": "support@nanoporetech.com",
@@ -28,7 +28,16 @@
     "jq",
     "xpath"
   ],
-  "contributors": [],
+  "contributors": [
+    {
+      "name": "Glen van Ginkel",
+      "url": "https://github.com/glenveegee"
+    },
+    {
+      "name": "Darren Mothersele",
+      "url": "https://github.com/darrenmothersele"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/nanoporetech/jmespath-plus"
