@@ -8,7 +8,14 @@ export type {
   JSONPrimitive,
   JSONValue,
 } from '@metrichor/jmespath/dist/types';
-export * as NumberScale from './types/number-scale.type';
+export type {
+  NumberScaleOptions,
+  ScaleDefinitions,
+  Scale,
+  ScaleUnit,
+  ScalePrefixDefinition,
+} from './utils/number-scale';
+export { numberScale } from './utils/number-scale';
 import { jmespath as JMESPath } from '@metrichor/jmespath';
 
 import { loadPlugins } from './plugins';

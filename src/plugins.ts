@@ -21,7 +21,7 @@ import { ExpressionNodeTree } from '@metrichor/jmespath/dist/types/Lexer';
 
 type UnknownFunction = (this: ThisType<unknown>, ...args: unknown[]) => unknown;
 
-export const loadPlugins = () => {
+export const loadPlugins = (): boolean => {
   registerFunction(
     'as_regexp',
     ([pattern, flags = '']: [string, string]): RegExp => {
@@ -52,7 +52,9 @@ export const loadPlugins = () => {
   registerFunction(
     'mode',
     ([vector]: [number[]]) => {
-      if (!vector.length) return null;
+      if (!vector.length) {
+        return null;
+      }
       const modeTracker = vector
         .sort((a: number, b: number) => a - b)
         .reduce((valueCount: { [mode: number]: [number, number] }, newValue: any) => {
@@ -76,7 +78,9 @@ export const loadPlugins = () => {
   registerFunction(
     'median',
     ([vector]: [number[]]) => {
-      if (!vector.length) return null;
+      if (!vector.length) {
+        return null;
+      }
       const sorted = vector.sort((a: number, b: number) => a - b);
       const halfway = vector.length / 2;
       if (vector.length % 2 === 0) {
@@ -98,12 +102,12 @@ export const loadPlugins = () => {
   registerFunction(
     'formatNumber',
     ([toFormat, precision, unit]: [number, number, string]) => {
-      const formattedNumber: string = numberScale(toFormat || 0.0, {
+      const formattedNumber = numberScale(toFormat || 0.0, {
         precision,
         recursive: 0,
         scale: 'SI',
         unit: unit || '',
-      });
+      }) as string;
       const hasMatch = /[\d\.]+/g.exec(formattedNumber);
       const hasOne = hasMatch && hasMatch[0] === '1';
       return `${formattedNumber}${unit && (hasOne ? '' : 's')}`;
@@ -114,7 +118,7 @@ export const loadPlugins = () => {
   registerFunction(
     'uniq',
     ([resolvedArgs]) => {
-      return Array.from(new Set<any>(resolvedArgs));
+      return Array.from(new Set<unknown>(resolvedArgs));
     },
     [{ types: [TYPE_ARRAY] }],
   );
@@ -208,7 +212,9 @@ export const loadPlugins = () => {
   registerFunction(
     'groupBy',
     function (this: any, [memberList, exprefNode]: [JSONObject[], ExpressionNodeTree | string]) {
-      if (!this._interpreter) return {};
+      if (!this._interpreter) {
+        return {};
+      }
 
       if (typeof exprefNode === 'string') {
         return memberList.reduce((grouped, member) => {
