@@ -1,29 +1,10 @@
-export interface NumberScaleOptions {
-  precision: number;
-  roundMode?: 'even' | 'odd' | 'up' | 'down';
-  scale: string;
-  unit: string;
-  recursive: number;
-}
-
-export interface ScaleDefinitions {
-  [scaleKey: string]: Scale;
-}
-
-export interface Scale {
-  list: ScaleUnit[];
-  map: {
-    [unit: string]: number;
-  };
-  re: RegExp;
-  base: number | string;
-}
-
-export type ScaleUnit = [string, number];
-
-export interface ScalePrefixDefinition {
-  [unit: string]: number;
-}
+import {
+  NumberScaleOptions,
+  ScaleDefinitions,
+  Scale,
+  ScalePrefixDefinition,
+  ScaleUnit,
+} from '../types/number-scale.type';
 
 /**
  * The default options
@@ -398,7 +379,7 @@ function parseScale(value: string | string[], options: NumberScaleOptions): numb
 }
 
 /**
- * Define and bind a new scale, or override an existing one
+ * Define and bind a new scale, or ovrride an existing one
  *
  * @function defineScale
  * @param {string} name          the scale name
@@ -407,18 +388,11 @@ function parseScale(value: string | string[], options: NumberScaleOptions): numb
  */
 function defineScale(name: string, prefixes: ScalePrefixDefinition, baseUnitValue: number) {
   knownScales[name] = buildScale(prefixes, baseUnitValue);
-  numberScale.scales[name] = knownScales[name];
+  numberScale.scales[name] = name;
 }
 
 // Scale Aliasses
 knownScales['IEEE-1541'] = knownScales.IEEE1541;
-
-export type NumberScaleProtoype = (num: number, options: NumberScaleOptions) => string | string[];
-export interface NumberScale extends NumberScaleProtoype {
-  scales: Record<string, Scale>;
-  defineScale: typeof defineScale;
-  parse: typeof parseScale;
-}
 
 /**
  * expose (readonly) API
@@ -432,7 +406,7 @@ export interface NumberScale extends NumberScaleProtoype {
  * @property {Function} defineScale
  * @property {Function} parse
  */
-export const numberScale: NumberScale = Object.defineProperties(_numberScale, {
+export const numberScale = Object.defineProperties(_numberScale, {
   options: {
     configurable: false,
     enumerable: true,
