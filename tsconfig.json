@@ -15,7 +15,7 @@
     "module": "esnext",
     "isolatedModules": true,
     "esModuleInterop": true,
-    "target": "es5",
+    "target": "es6",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
